@@ -19,7 +19,10 @@ void APlayerClass::SetupPlayerInputComponent(UInputComponent* PlayerInputCompone
 {
 	Super::SetupPlayerInputComponent(PlayerInputComponent);
 
+	// Run the Move method when the axis mappings for "MoveForward" are pressed
 	PlayerInputComponent->BindAxis(TEXT("MoveForward"), this, &APlayerClass::Move);
+	// Run the Turn method when the axis mappings for "Turn" are pressed
+	PlayerInputComponent->BindAxis(TEXT("Turn"), this, &APlayerClass::Turn);
 }
 
 void APlayerClass::Move(float value)
@@ -28,4 +31,14 @@ void APlayerClass::Move(float value)
 	float deltaTime = UGameplayStatics::GetWorldDeltaSeconds(this);
 	deltaLocation.X = value * deltaTime * speed;
 	AddActorLocalOffset(deltaLocation);
+}
+
+void APlayerClass::Turn(float value)
+{
+	FRotator deltaRotation = FRotator::ZeroRotator;
+	// Calculates the delta time
+	float deltaTime = UGameplayStatics::GetWorldDeltaSeconds(this);
+	// Yaw = value * deltaTime * turnRate
+	deltaRotation.Yaw = value * turnRate * deltaTime;
+	AddActorLocalRotation(deltaRotation, true);
 }
