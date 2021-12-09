@@ -31,4 +31,11 @@ private:
 	UPROPERTY(EditDefaultsOnly, Category = "Combat")
 		float AttackRange = 100.f;
 
+	FTimerHandle FireRateTimerhandle;
+	float FireRate = 2.f;
+
+	void CheckFireCondition();
+
+	bool InFireRange();
+		
 };

@@ -3,6 +3,7 @@
 
 #include "BasePawn.h"
 #include "Components/CapsuleComponent.h"
+#include <Runtime/Engine/Public/DrawDebugHelpers.h>
 
 
 // Sets default values
@@ -42,5 +43,11 @@ void ABasePawn::RotateEnemy(FVector LookAtTarget)
 	FVector toTarget = LookAtTarget - characterMesh->GetComponentLocation();
 	FRotator LookAtRotation = FRotator(0.f, toTarget.Rotation().Yaw, 0.f);
 	characterMesh->SetWorldRotation(LookAtRotation);
+}
+
+void ABasePawn::Fire()
+{
+	FVector ProjectileSpawnPointLocation = ProjectileSpawnPoint->GetComponentLocation();
+	DrawDebugSphere(GetWorld(), ProjectileSpawnPointLocation, 25.f, 12, FColor::Red, false, 3.f);
 }
 

@@ -22,6 +22,8 @@ protected:
 
 	void RotateEnemy(FVector LookAtTarget);
 
+	void Fire();
+
 private:
 	// The "class" key word is forward declaring UCapsuleComponent making it so we don't need to include the header file
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Components", meta = (AllowPrivateAccess = "true"))

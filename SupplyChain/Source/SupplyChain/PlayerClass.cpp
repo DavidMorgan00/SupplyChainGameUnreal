@@ -23,6 +23,8 @@ void APlayerClass::SetupPlayerInputComponent(UInputComponent* PlayerInputCompone
 	PlayerInputComponent->BindAxis(TEXT("MoveForward"), this, &APlayerClass::Move);
 	// Run the Turn method when the axis mappings for "Turn" are pressed
 	PlayerInputComponent->BindAxis(TEXT("Turn"), this, &APlayerClass::Turn);
+
+	PlayerInputComponent->BindAction(TEXT("Fire"), IE_Pressed, this, &APlayerClass::Fire);
 }
 
 void APlayerClass::Tick(float DeltaTime)
