@@ -14,8 +14,11 @@ ABasePawn::ABasePawn()
 	capsuleComponent = CreateDefaultSubobject<UCapsuleComponent>(TEXT("Capsule Collider"));
 	RootComponent = capsuleComponent;
 
-	playerMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Player Mesh"));
-	playerMesh->SetupAttachment(capsuleComponent);
+	characterMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Player Mesh"));
+	characterMesh->SetupAttachment(capsuleComponent);
+
+	ProjectileSpawnPoint = CreateDefaultSubobject<USceneComponent>(TEXT("ProjectileSpawn Point"));
+	ProjectileSpawnPoint->SetupAttachment(characterMesh);
 
 }
 
@@ -26,17 +29,18 @@ void ABasePawn::BeginPlay()
 	
 }
 
-// Called every frame
-void ABasePawn::Tick(float DeltaTime)
-{
-	Super::Tick(DeltaTime);
-
-}
 
 // Called to bind functionality to input
 void ABasePawn::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 {
 	Super::SetupPlayerInputComponent(PlayerInputComponent);
 
+}
+
+void ABasePawn::RotateEnemy(FVector LookAtTarget)
+{
+	FVector toTarget = LookAtTarget - characterMesh->GetComponentLocation();
+	FRotator LookAtRotation = FRotator(0.f, toTarget.Rotation().Yaw, 0.f);
+	characterMesh->SetWorldRotation(LookAtRotation);
 }
 

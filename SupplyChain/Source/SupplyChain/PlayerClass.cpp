@@ -25,6 +25,29 @@ void APlayerClass::SetupPlayerInputComponent(UInputComponent* PlayerInputCompone
 	PlayerInputComponent->BindAxis(TEXT("Turn"), this, &APlayerClass::Turn);
 }
 
+void APlayerClass::Tick(float DeltaTime)
+{
+	Super::Tick(DeltaTime);
+
+	if (PlayerControllerRef)
+	{
+		FHitResult hitResult;
+		PlayerControllerRef->GetHitResultUnderCursor(
+			ECollisionChannel::ECC_Visibility,
+			false,
+			hitResult);
+
+		RotateEnemy(hitResult.ImpactPoint);
+	}
+}
+
+void APlayerClass::BeginPlay()
+{
+	Super::BeginPlay();
+
+	PlayerControllerRef = Cast<APlayerController>(GetController());
+}
+
 void APlayerClass::Move(float value)
 {
 	FVector deltaLocation(0.0f, 0.0f, 0.0f);
