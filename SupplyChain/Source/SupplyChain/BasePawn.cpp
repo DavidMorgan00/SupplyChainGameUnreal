@@ -3,7 +3,8 @@
 
 #include "BasePawn.h"
 #include "Components/CapsuleComponent.h"
-#include <Runtime/Engine/Public/DrawDebugHelpers.h>
+#include "Components/StaticMeshComponent.h"
+#include "Projectile.h"
 
 
 // Sets default values
@@ -23,20 +24,7 @@ ABasePawn::ABasePawn()
 
 }
 
-// Called when the game starts or when spawned
-void ABasePawn::BeginPlay()
-{
-	Super::BeginPlay();
-	
-}
 
-
-// Called to bind functionality to input
-void ABasePawn::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
-{
-	Super::SetupPlayerInputComponent(PlayerInputComponent);
-
-}
 
 void ABasePawn::RotateEnemy(FVector LookAtTarget)
 {
@@ -48,6 +36,11 @@ void ABasePawn::RotateEnemy(FVector LookAtTarget)
 void ABasePawn::Fire()
 {
 	FVector ProjectileSpawnPointLocation = ProjectileSpawnPoint->GetComponentLocation();
-	DrawDebugSphere(GetWorld(), ProjectileSpawnPointLocation, 25.f, 12, FColor::Red, false, 3.f);
+
+	FVector Location = ProjectileSpawnPoint->GetComponentLocation();
+	FRotator Rotation = ProjectileSpawnPoint->GetComponentRotation();
+
+	AProjectile* Projectile = GetWorld()->SpawnActor<AProjectile>(ProjectileClass, Location, Rotation);
+	Projectile->SetOwner(this);
 }
 

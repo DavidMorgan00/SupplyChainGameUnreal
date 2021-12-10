@@ -6,9 +6,11 @@
 #include "GameFramework/Actor.h"
 #include "Projectile.generated.h"
 
+
 UCLASS()
 class SUPPLYCHAIN_API AProjectile : public AActor
 {
+
 	GENERATED_BODY()
 	
 public:	
@@ -19,12 +21,22 @@ protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 
+
 private:
 
 	UPROPERTY(EditDefaultsOnly, Category = "Combat")
 		UStaticMeshComponent* ProjectileMesh;
 
-public:	
+	UPROPERTY(VisibleAnywhere, Category = "Movement")
+		class UProjectileMovementComponent* ProjectileMovementComponent;
+
+	UFUNCTION()
+	void OnHit(UPrimitiveComponent* HitComponent, AActor* OtherActor, UPrimitiveComponent* OtherComponent, FVector NormalImpulse, const FHitResult& hit);
+
+	UPROPERTY(EditAnywhere)
+		float Damage = 50.f;
+
+public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
