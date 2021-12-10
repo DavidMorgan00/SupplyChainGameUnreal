@@ -23,6 +23,31 @@ void APlayerClass::SetupPlayerInputComponent(UInputComponent* PlayerInputCompone
 	PlayerInputComponent->BindAxis(TEXT("MoveForward"), this, &APlayerClass::Move);
 	// Run the Turn method when the axis mappings for "Turn" are pressed
 	PlayerInputComponent->BindAxis(TEXT("Turn"), this, &APlayerClass::Turn);
+
+	PlayerInputComponent->BindAction(TEXT("Fire"), IE_Pressed, this, &APlayerClass::Fire);
+}
+
+void APlayerClass::Tick(float DeltaTime)
+{
+	Super::Tick(DeltaTime);
+
+	if (PlayerControllerRef)
+	{
+		FHitResult hitResult;
+		PlayerControllerRef->GetHitResultUnderCursor(
+			ECollisionChannel::ECC_Visibility,
+			false,
+			hitResult);
+
+		RotateEnemy(hitResult.ImpactPoint);
+	}
+}
+
+void APlayerClass::BeginPlay()
+{
+	Super::BeginPlay();
+
+	PlayerControllerRef = Cast<APlayerController>(GetController());
 }
 
 void APlayerClass::Move(float value)

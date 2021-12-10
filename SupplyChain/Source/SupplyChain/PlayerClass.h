@@ -20,6 +20,12 @@ public:
 	// Called to bind functionality to input
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
+	virtual void BeginPlay() override;
+
+	// Called every frame
+	virtual void Tick(float DeltaTime) override;
+
+
 private:
 	UPROPERTY(VisibleAnywhere, Category = "Components")
 		class USpringArmComponent* SpringArm;
@@ -36,5 +42,7 @@ private:
 	void Move(float value);
 
 	void Turn(float value);
+
+	APlayerController* PlayerControllerRef;
 
 };

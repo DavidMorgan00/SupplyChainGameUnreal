@@ -3,6 +3,8 @@
 
 #include "BasePawn.h"
 #include "Components/CapsuleComponent.h"
+#include "Components/StaticMeshComponent.h"
+#include "Projectile.h"
 
 
 // Sets default values
@@ -14,29 +16,31 @@ ABasePawn::ABasePawn()
 	capsuleComponent = CreateDefaultSubobject<UCapsuleComponent>(TEXT("Capsule Collider"));
 	RootComponent = capsuleComponent;
 
-	playerMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Player Mesh"));
-	playerMesh->SetupAttachment(capsuleComponent);
+	characterMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Player Mesh"));
+	characterMesh->SetupAttachment(capsuleComponent);
+
+	ProjectileSpawnPoint = CreateDefaultSubobject<USceneComponent>(TEXT("ProjectileSpawn Point"));
+	ProjectileSpawnPoint->SetupAttachment(characterMesh);
 
 }
 
-// Called when the game starts or when spawned
-void ABasePawn::BeginPlay()
+
+
+void ABasePawn::RotateEnemy(FVector LookAtTarget)
 {
-	Super::BeginPlay();
-	
+	FVector toTarget = LookAtTarget - characterMesh->GetComponentLocation();
+	FRotator LookAtRotation = FRotator(0.f, toTarget.Rotation().Yaw, 0.f);
+	characterMesh->SetWorldRotation(LookAtRotation);
 }
 
-// Called every frame
-void ABasePawn::Tick(float DeltaTime)
+void ABasePawn::Fire()
 {
-	Super::Tick(DeltaTime);
+	FVector ProjectileSpawnPointLocation = ProjectileSpawnPoint->GetComponentLocation();
 
-}
+	FVector Location = ProjectileSpawnPoint->GetComponentLocation();
+	FRotator Rotation = ProjectileSpawnPoint->GetComponentRotation();
 
-// Called to bind functionality to input
-void ABasePawn::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
-{
-	Super::SetupPlayerInputComponent(PlayerInputComponent);
-
+	AProjectile* Projectile = GetWorld()->SpawnActor<AProjectile>(ProjectileClass, Location, Rotation);
+	Projectile->SetOwner(this);
 }
 
