@@ -15,6 +15,12 @@ void AEnemyClass::Tick(float DeltaTime)
 	}
 }
 
+void AEnemyClass::HandleDeath()
+{
+	Super::HandleDeath();
+	Destroy();
+}
+
 void AEnemyClass::BeginPlay()
 {
 	Super::BeginPlay();

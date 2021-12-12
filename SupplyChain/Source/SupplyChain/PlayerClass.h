@@ -25,6 +25,10 @@ public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
+	void HandleDeath();
+
+	APlayerController* GetPlayerController() const { return PlayerController; }
+
 
 private:
 	UPROPERTY(VisibleAnywhere, Category = "Components")
@@ -43,6 +47,6 @@ private:
 
 	void Turn(float value);
 
-	APlayerController* PlayerControllerRef;
+	APlayerController* PlayerController;
 
 };

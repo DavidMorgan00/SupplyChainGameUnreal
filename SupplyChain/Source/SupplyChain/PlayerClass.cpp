@@ -31,10 +31,10 @@ void APlayerClass::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
-	if (PlayerControllerRef)
+	if (PlayerController)
 	{
 		FHitResult hitResult;
-		PlayerControllerRef->GetHitResultUnderCursor(
+		PlayerController->GetHitResultUnderCursor(
 			ECollisionChannel::ECC_Visibility,
 			false,
 			hitResult);
@@ -43,11 +43,18 @@ void APlayerClass::Tick(float DeltaTime)
 	}
 }
 
+void APlayerClass::HandleDeath()
+{
+	Super::HandleDeath();
+	SetActorHiddenInGame(true);
+	SetActorTickEnabled(false);
+}
+
 void APlayerClass::BeginPlay()
 {
 	Super::BeginPlay();
 
-	PlayerControllerRef = Cast<APlayerController>(GetController());
+	PlayerController = Cast<APlayerController>(GetController());
 }
 
 void APlayerClass::Move(float value)
@@ -55,7 +62,7 @@ void APlayerClass::Move(float value)
 	FVector deltaLocation(0.0f, 0.0f, 0.0f);
 	float deltaTime = UGameplayStatics::GetWorldDeltaSeconds(this);
 	deltaLocation.X = value * deltaTime * speed;
-	AddActorLocalOffset(deltaLocation);
+	AddActorLocalOffset(deltaLocation, true);
 }
 
 void APlayerClass::Turn(float value)

@@ -24,7 +24,10 @@ ABasePawn::ABasePawn()
 
 }
 
-
+void ABasePawn::HandleDeath()
+{
+	//TODO Visual and sound effects
+}
 
 void ABasePawn::RotateEnemy(FVector LookAtTarget)
 {

@@ -2,6 +2,8 @@
 
 
 #include "HealthComponent.h"
+#include "Kismet/GameplayStatics.h"
+#include "SupplyChainGameMode.h"
 
 // Sets default values for this component's properties
 UHealthComponent::UHealthComponent()
@@ -22,6 +24,7 @@ void UHealthComponent::BeginPlay()
 	currentHealth = maxHealth;
 
 	GetOwner()->OnTakeAnyDamage.AddDynamic(this, &UHealthComponent::DamageTaken);
+	SupplyChainGameMode = Cast<ASupplyChainGameMode>(UGameplayStatics::GetGameMode(this));
 }
 
 
@@ -38,7 +41,11 @@ void UHealthComponent::DamageTaken(AActor* DamagedActor, float Damage, const UDa
 	if (Damage <= 0.f) return;
 
 	currentHealth -= Damage;
-	UE_LOG(LogTemp, Warning, TEXT("Health %f"), currentHealth);
+
+	if (currentHealth <= 0.f && SupplyChainGameMode != NULL)
+	{
+		SupplyChainGameMode->ActorDied(DamagedActor);
+	}
 
 
 }
