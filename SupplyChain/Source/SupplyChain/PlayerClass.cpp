@@ -8,11 +8,7 @@
 
 APlayerClass::APlayerClass()
 {
-	SpringArm = CreateDefaultSubobject<USpringArmComponent>(TEXT("Spring Arm"));
-	SpringArm->SetupAttachment(RootComponent);
-
-	Camera = CreateDefaultSubobject<UCameraComponent>(TEXT("Camera"));
-	Camera->SetupAttachment(SpringArm);
+	
 }
 
 void APlayerClass::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
@@ -55,7 +51,7 @@ void APlayerClass::Move(float value)
 	FVector deltaLocation(0.0f, 0.0f, 0.0f);
 	float deltaTime = UGameplayStatics::GetWorldDeltaSeconds(this);
 	deltaLocation.X = value * deltaTime * speed;
-	AddActorLocalOffset(deltaLocation);
+	AddActorLocalOffset(deltaLocation, true);
 }
 
 void APlayerClass::Turn(float value)
